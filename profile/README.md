@@ -2,7 +2,7 @@
 
 **Don't let broken agent changes merge.**
 
-Your agent still returns the right answer — but now it calls 3× the tools. A
+Your agent still returns the right answer -- but now it calls 3x the tools. A
 retry loop that wasn't there last week. A new tool the baseline has never seen.
 Output evals pass. Review sees a green diff. It ships.
 
@@ -131,7 +131,7 @@ tell you when an agent's execution behavior changed relative to a baseline.
 
 ---
 
-Website: [maida.ai](https://maida.ai) ·
-Docs: [maida.ai/docs](https://maida.ai/docs/) ·
-PyPI: [`maida-ai`](https://pypi.org/project/maida-ai/) ·
+Website: [maida.ai](https://maida.ai) |
+Docs: [maida.ai/docs](https://maida.ai/docs/) |
+PyPI: [`maida-ai`](https://pypi.org/project/maida-ai/) |
 Contact: [contact@maida.ai](mailto:contact@maida.ai)
