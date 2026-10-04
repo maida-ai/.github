@@ -12,7 +12,10 @@ class ProfileReadmeTests(unittest.TestCase):
         self.assertIn('uv tool install "maida-ai==0.6.1"', block)
         self.assertIn("cd my-repo", block)
         self.assertLess(block.index("maida init"), block.index("maida check"))
-        self.assertLess(block.index("maida check"), block.index("maida view <TRACE_ID>"))
+        self.assertLess(block.index("maida check"), block.index('exact "View:" command'))
+        self.assertIn("maida view 83aa19e3", text)
+        for example in re.findall(r"```bash\n(.*?)```", text, re.S):
+            self.assertNotRegex(example, r"<[A-Z][A-Z_]*>")
         self.assertIn("Claude Code task", block)
         self.assertIn("3 active checks passed", text)
         self.assertIn("## Protect the next agent change", text)

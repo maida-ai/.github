@@ -17,11 +17,12 @@ maida init
 # Run one normal Claude Code task and exit the session.
 
 maida check
-# Follow the printed:
-maida view <TRACE_ID>
+# Then run the exact "View:" command printed by Maida.
 ```
 
 Approve init's setup preview, then start a new agent session. **A successful first report says `3 active checks passed`**, identifies your task, and prints the viewer command. Open it to see the task's execution timeline. You need no tutorial clone or agent-code changes. If Maida is already in the project's uv environment, prefix its commands with `uv run`; plain `claude` still works.
+
+For example: `maida view 83aa19e3`. Use the command from your own report.
 
 **Runs on your machine or CI runner. No Maida cloud account required.** Task evidence is not uploaded to Maida; your coding agent still uses its normal provider.
 
