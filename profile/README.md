@@ -2,136 +2,32 @@
 
 **Don't let broken agent changes merge.**
 
-Your agent still returns the right answer -- but now it calls 3x the tools. A
-retry loop that wasn't there last week. A new tool the baseline has never seen.
-Output evals pass. Review sees a green diff. It ships.
+Maida is a local-first, pre-merge behavioral regression gate for AI agents. Compare observed executions against a reviewed baseline and checked-in policy, and see what changed before merge.
 
-Maida is the pre-merge behavioral regression gate for AI agents. It compares
-agent execution traces against checked-in baselines and blocks PRs when
-structural behavior regresses.
-
-Maida sits earlier than production tools and complements output evals. Output
-evals ask whether the answer was good. Maida asks whether this PR changed how
-the agent behaves.
-
-No cloud account required. No telemetry by default. Runs stay in your
-environment unless you explicitly export them.
-
----
-
-## Try it in 60 seconds
-
-No repo clone, no config file, no API key, no sign-up:
+## Start with one task
 
 ```bash
-pip install maida-ai
-maida demo               # traced run of a bundled simulated agent
-maida view               # open the timeline at 127.0.0.1:8712
-maida demo --regression  # watch the gate catch a bad refactor
+uv tool install "maida-ai==0.5.3"
+maida demo --regression
 ```
 
-📚 Full documentation: **[maida.ai/docs](https://maida.ai/docs/)**
+Expect FAIL and a PR-comment preview; exit `1` is deliberate. The offline demo needs no clone, API key, or account.
 
----
+**[Protect one coding-agent task →](https://maida.ai/docs/getting-started/)**
 
-## The workflow
+Follow the gradual walkthrough: capture one useful task, review a few checks, see a pass, introduce a deliberate regression, and repair it. Add CI when that local loop works. The guide names the next safe action and what the evidence covers. For a Python tool-calling agent, use the [secondary walkthrough](https://github.com/maida-ai/maida-tutorials/blob/main/guides/python-agent.md).
 
-Instrument one agent entrypoint:
+The verdict is PASS, FAIL, or INCONCLUSIVE. Exit `0` includes INCONCLUSIVE, so consumers must read the verdict. A behavioral check complements correctness tests. Repository protection and a fresh check on the actual PR head need separate verification.
 
-```python
-from maida import trace
+## Find what you need next
 
-@trace
-def run_agent(user_input: str):
-    # Your existing agent code
-    ...
-```
+- [maida](https://github.com/maida-ai/maida): CLI, tracing, comparison engine and local investigation.
+- [maida-tutorials](https://github.com/maida-ai/maida-tutorials): one home for progressive tutorials, examples and demo applications.
+- [maida-assert](https://github.com/maida-ai/maida-assert): Action setup and repository protection requirements.
+- [Product skills](https://github.com/maida-ai/skills/tree/main/product): help with capture, adding a gate, or interpreting its result.
+- [maida-ts](https://github.com/maida-ai/maida-ts): limited TypeScript trace writer.
+- [opencode-plugin](https://github.com/maida-ai/opencode-plugin): supported native capture integration.
 
-Capture a reviewed baseline from known-good trials, then gate every change
-against it:
+Traces stay on your machine or CI runner unless you explicitly configure otherwise. Capture may use a local telemetry receiver; it is not telemetry to Maida.
 
-```bash
-# 1. Sample known-good behavior
-maida run my_agent.py --trials 25 --no-fail-fast --json-out baseline-report.json
-
-# 2. Check in the reviewed baseline
-maida baseline --from-report baseline-report.json --out baselines/my_agent.json
-
-# 3. Gate the candidate after your next change
-maida run my_agent.py \
-  --baseline baselines/my_agent.json \
-  --policy .maida/policy.yaml \
-  --format markdown
-```
-
-Exit code `0` means pass or inconclusive; `1` means the gate failed.
-`maida init --github` scaffolds the policy and the workflow for you.
-
----
-
-## GitHub Action
-
-[`maida-ai/maida-assert@v5`](https://github.com/maida-ai/maida-assert) runs the
-same gate on every pull request and posts a sticky verdict comment.
-
-```yaml
-name: Agent Regression Check
-
-on: [pull_request]
-
-jobs:
-  agent-check:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      checks: write
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v7
-      - uses: maida-ai/maida-assert@v5
-        with:
-          agent-script: my_agent.py
-          baseline: baselines/my_agent.json
-          policy: .maida/policy.yaml
-          python-version: '3.12'
-```
-
-Your `agent-script` must use `@trace` or `traced_run()` so Maida can record a
-run.
-
----
-
-## What Maida flags
-
-- Step-count regressions
-- Tool-call count regressions
-- Unexpected tool paths
-- Loop and cycle risk
-- Guardrail events
-- Latency envelope changes
-- Cost envelope changes
-- Missing stop conditions
-
-These are behavioral regression signals. They do not prove output quality. They
-tell you when an agent's execution behavior changed relative to a baseline.
-
----
-
-## Repositories
-
-| Repo | What it is |
-|------|------------|
-| [maida](https://github.com/maida-ai/maida) | Python package, `maida` CLI, SDK, local run storage, and timeline viewer |
-| [maida-assert](https://github.com/maida-ai/maida-assert) | GitHub Action that runs the gate on pull requests |
-| [maida-tutorials](https://github.com/maida-ai/maida-tutorials) | Runnable notebooks for trying Maida on agent code |
-| [maida-workflows](https://github.com/maida-ai/maida-workflows) | Verify runtime-generated agent plans before they run |
-| [maida-ts](https://github.com/maida-ai/maida-ts) | TypeScript mirror of the trace contract |
-| [opencode-plugin](https://github.com/maida-ai/opencode-plugin) | Record OpenCode sessions as Maida traces |
-| [Demos](https://github.com/maida-ai/Demos) | Self-contained demos of the gate |
-
----
-
-Website: [maida.ai](https://maida.ai) |
-Docs: [maida.ai/docs](https://maida.ai/docs/) |
-PyPI: [`maida-ai`](https://pypi.org/project/maida-ai/) |
-Contact: [contact@maida.ai](mailto:contact@maida.ai)
+[Website](https://maida.ai) · [Documentation](https://maida.ai/docs/) · [PyPI](https://pypi.org/project/maida-ai/)
