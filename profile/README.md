@@ -40,6 +40,18 @@ In the [canonical storefront demo](https://github.com/maida-ai/maida-tutorials/t
 
 For a smaller canned example without a clone, run `maida demo --regression`: expect a FAIL verdict and PR-comment preview. The rehearsal exits `0` when that expected failure is reproduced.
 
+## Core product
+
+- [Maida](https://github.com/maida-ai/maida): the engine, CLI, and public contracts. Start here to check your own agent change.
+- [Maida tutorials](https://github.com/maida-ai/maida-tutorials): the canonical runnable coding-agent project, walkthroughs, and examples.
+- [Maida Action](https://github.com/maida-ai/maida-assert): the GitHub PR boundary around the same engine and CLI.
+
+## Supported extensions
+
+- [Product skills](https://github.com/maida-ai/skills): instrument an agent, add the gate, and debug regressions.
+- [OpenCode plugin](https://github.com/maida-ai/opencode-plugin): record local OpenCode traces for Maida.
+- [TypeScript trace writer](https://github.com/maida-ai/maida-ts): a limited write-side mirror for TS/JS integrations; Python owns behavior and schema.
+
 ## Find what you need next
 
 - [Check your own task](https://maida.ai/docs/getting-started/): setup, first report, and protection for the next change.
@@ -50,3 +62,5 @@ For a smaller canned example without a clone, run `maida demo --regression`: exp
 - [CLI and technical reference](https://maida.ai/docs/cli/): commands, coverage, configuration, and data formats.
 
 [Website](https://maida.ai) · [Documentation](https://maida.ai/docs/) · [PyPI](https://pypi.org/project/maida-ai/)
+
+The website source, this organization-profile repository, and the Action smoke fixture are public infrastructure maintained for Maida. They are outside the product and extension hierarchy.
